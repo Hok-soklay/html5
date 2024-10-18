@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bouncing Ball Game</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        canvas {
+            border: 2px solid #000;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+    <script>
+        // Get the canvas and context
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Ball properties
+        const ball = {
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            radius: 20,
+            dx: 4, // Change in x (horizontal speed)
+            dy: 4, // Change in y (vertical speed)
+            color: '#0095DD' // Initial color
+        };
+
+        // Function to draw the ball
+        function drawBall() {
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+            ctx.fillStyle = ball.color;
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        // Function to update the game state
+        function update() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+
+            drawBall(); // Draw the ball
+
+            // Check for collision with walls
+            if (ball.x + ball.dx > canvas.width - ball.radius || ball.x + ball.dx < ball.radius) {
+                ball.dx = -ball.dx; // Reverse horizontal direction
+                changeColor(); // Change color on collision
+            }
+            if (ball.y + ball.dy > canvas.height - ball.radius || ball.y + ball.dy < ball.radius) {
+                ball.dy = -ball.dy; // Reverse vertical direction
+                changeColor(); // Change color on collision
+            }
+
+            // Move the ball
+            ball.x += ball.dx;
+            ball.y += ball.dy;
+
+            requestAnimationFrame(update); // Request the next animation frame
+        }
+
+        // Function to change the ball's color
+        function changeColor() {
+            ball.color = '#' + Math.floor(Math.random() * 16777215).toString(16); // Random color
+        }
+
+        // Start the game
+        update();
+    </script>
+</body>
+</html>
